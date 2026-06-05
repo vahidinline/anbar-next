@@ -1,0 +1,5 @@
+{
+  "platform": "node",
+  "build": "npm run build",
+  "start": "node dist/server/index.js"
+}

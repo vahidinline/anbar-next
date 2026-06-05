@@ -1,0 +1,153 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  action     String
+  created_at DateTime @default(now())
+  details    String?
+  entity     String
+  entity_id  String?
+  user_email String?
+  user_id    String?
+
+  @@map("audit_logs")
+}
+
+model Contact {
+  id         String   @id @default(cuid())
+  address    String?
+  created_at DateTime @default(now())
+  mobile     String?
+  name       String
+  phone      String?
+  user_id    String
+
+  inventory_documents InventoryDocument[]
+
+  @@map("contacts")
+}
+
+model InventoryDocument {
+  id               String   @id @default(cuid())
+  contact_id       String?
+  created_at       DateTime @default(now())
+  description      String?
+  doc_number       Int
+  document_date    String
+  document_type    String
+  product_group_id String?
+  product_id       String?
+  quantity         Int
+  unit             String?
+  user_id          String
+  warehouse_id     String?
+
+  contact       Contact?      @relation(fields: [contact_id], references: [id])
+  product_group ProductGroup? @relation(fields: [product_group_id], references: [id])
+  product       Product?      @relation(fields: [product_id], references: [id])
+
+  serial_numbers_inventory SerialNumber[] @relation("inventory_doc")
+  serial_numbers_outgoing  SerialNumber[] @relation("outgoing_doc")
+
+  @@map("inventory_documents")
+}
+
+model ProductGroup {
+  id          String   @id @default(cuid())
+  created_at  DateTime @default(now())
+  description String?
+  title       String
+  user_id     String
+
+  products            Product[]
+  inventory_documents InventoryDocument[]
+
+  @@map("product_groups")
+}
+
+model Product {
+  id                String   @id @default(cuid())
+  barcode           String?
+  code              String
+  created_at        DateTime @default(now())
+  description       String?
+  die_material      String?
+  initial_quantity  Int
+  is_serial_tracked Boolean
+  name              String
+  notes             String?
+  product_group_id  String?
+  tracking_notes    String?
+  unit              String?
+  user_id           String
+  warehouse_id      String?
+
+  product_group       ProductGroup?       @relation(fields: [product_group_id], references: [id])
+  inventory_documents InventoryDocument[]
+  serial_numbers      SerialNumber[]
+
+  @@map("products")
+}
+
+model Profile {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  email      String?  @unique
+  password   String?
+  full_name  String?
+  is_active  Boolean  @default(true)
+  phone      String?
+  updated_at DateTime @default(now()) @updatedAt
+
+  @@map("profiles")
+}
+
+model SerialNumber {
+  id                    String   @id @default(cuid())
+  batch_number          String?
+  created_at            DateTime @default(now())
+  inventory_document_id String?
+  invoice_number        String?
+  outgoing_document_id  String?
+  product_id            String
+  proforma_number       String?
+  serial_number         String
+  status                String
+  user_id               String
+  warehouse_id          String?
+
+  inventory_document InventoryDocument? @relation("inventory_doc", fields: [inventory_document_id], references: [id])
+  outgoing_document  InventoryDocument? @relation("outgoing_doc", fields: [outgoing_document_id], references: [id])
+  product            Product            @relation(fields: [product_id], references: [id])
+  warehouse          Warehouse?         @relation(fields: [warehouse_id], references: [id])
+
+  @@map("serial_numbers")
+}
+
+model UserRole {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+  role       String // "admin" | "warehouse_keeper" | "sales"
+  user_id    String
+
+  @@map("user_roles")
+}
+
+model Warehouse {
+  id          String   @id @default(cuid())
+  created_at  DateTime @default(now())
+  description String?
+  name        String
+  user_id     String
+
+  serial_numbers SerialNumber[]
+
+  @@map("warehouses")
+}
