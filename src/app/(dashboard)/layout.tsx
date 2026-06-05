@@ -88,7 +88,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       <aside
         className={cn(
           "fixed lg:static inset-y-0 right-0 z-40 w-64 bg-sidebar text-sidebar-foreground transition-transform duration-200 flex flex-col",
-          open ? "translate-x-0" : "translate-x-full lg:translate-x-0"
+          open ? "translate-x-0" : "translate-x-full lg:translate-x-0",
         )}
       >
         <div className="px-5 py-5 border-b border-sidebar-border flex items-center gap-3">
@@ -117,7 +117,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
                   active
                     ? "bg-primary text-primary-foreground shadow-soft"
-                    : "hover:bg-sidebar-accent text-sidebar-foreground/85"
+                    : "hover:bg-sidebar-accent text-sidebar-foreground/85",
                 )}
               >
                 <Icon className="size-[18px]" />
@@ -140,10 +140,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {open && (
-        <div
-          className="fixed inset-0 bg-black/40 z-30 lg:hidden"
-          onClick={() => setOpen(false)}
-        />
+        <div className="fixed inset-0 bg-black/40 z-30 lg:hidden" onClick={() => setOpen(false)} />
       )}
 
       {/* Main */}

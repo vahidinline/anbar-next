@@ -48,13 +48,10 @@ src/
 route‌های موجود همچنان کار می‌کنند. برای بهینه‌سازی هر صفحه، الگو:
 
 ```tsx
-import { useSupabaseList } from '@/hooks/useSupabaseList';
-import { productsService } from '@/modules/products/services';
+import { useSupabaseList } from "@/hooks/useSupabaseList";
+import { productsService } from "@/modules/products/services";
 
-const { data: products = [], isLoading } = useSupabaseList(
-  ['products'],
-  productsService.list,
-);
+const { data: products = [], isLoading } = useSupabaseList(["products"], productsService.list);
 ```
 
 ## آماده‌سازی Desktop

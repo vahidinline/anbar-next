@@ -8,7 +8,7 @@ export async function fetchContactsData() {
 
 export async function saveContact(data: any, userId: string) {
   const { id, name, mobile, phone, address } = data;
-  
+
   if (id) {
     await prisma.contact.update({
       where: { id },
@@ -16,7 +16,13 @@ export async function saveContact(data: any, userId: string) {
     });
   } else {
     await prisma.contact.create({
-      data: { name, mobile: mobile || null, phone: phone || null, address: address || null, user_id: userId },
+      data: {
+        name,
+        mobile: mobile || null,
+        phone: phone || null,
+        address: address || null,
+        user_id: userId,
+      },
     });
   }
   return { success: true };

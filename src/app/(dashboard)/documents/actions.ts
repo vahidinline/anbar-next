@@ -2,14 +2,23 @@
 
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/next-auth";
 
 export async function fetchDocumentsData() {
   const [docs, products, groups, contacts, warehouses] = await Promise.all([
     prisma.inventoryDocument.findMany({ orderBy: { doc_number: "desc" } }),
     prisma.product.findMany({
-      select: { id: true, code: true, name: true, product_group_id: true, unit: true, initial_quantity: true, is_serial_tracked: true, warehouse_id: true },
-      orderBy: { name: "asc" }
+      select: {
+        id: true,
+        code: true,
+        name: true,
+        product_group_id: true,
+        unit: true,
+        initial_quantity: true,
+        is_serial_tracked: true,
+        warehouse_id: true,
+      },
+      orderBy: { name: "asc" },
     }),
     prisma.productGroup.findMany({ select: { id: true, title: true } }),
     prisma.contact.findMany({ select: { id: true, name: true }, orderBy: { name: "asc" } }),
@@ -54,12 +63,12 @@ export async function saveDocument(data: any, userId: string) {
   const product = await prisma.product.findUnique({ where: { id: product_id } });
   if (!product) throw new Error("Product not found");
 
-  return await prisma.$transaction(async (tx) => {
+  return await prisma.$transaction(async (tx: any) => {
     // 1. Get the max doc_number to auto-increment since Prisma schema uses Int
     // Assuming doc_number is auto-incremented or generated manually if not provided
     // Wait, the original supabase schema for inventory_documents doc_number might have been an identity column.
     // If Prisma doesn't auto-increment it because there's no @default(autoincrement()), we need to generate it.
-    // Let's check prisma schema: doc_number Int (no default). So we must provide it or it's auto-generated in db? 
+    // Let's check prisma schema: doc_number Int (no default). So we must provide it or it's auto-generated in db?
     // Supabase has identity by default. Prisma doesn't know it. We'll find max and add 1.
     const maxDoc = await tx.inventoryDocument.aggregate({ _max: { doc_number: true } });
     const nextDocNum = (maxDoc._max.doc_number || 1000) + 1;
@@ -68,13 +77,15 @@ export async function saveDocument(data: any, userId: string) {
       const existing = await tx.serialNumber.findMany({
         where: { serial_number: { in: serials } },
       });
-      const map = new Map(existing.map(r => [r.serial_number, r]));
+      const map = new Map<string, any>(existing.map((r: any) => [r.serial_number, r]));
       for (const s of serials) {
         const row = map.get(s);
         if (!row) throw new Error(`سریال «${s}» در سیستم ثبت نشده است`);
         if (row.product_id !== product_id) throw new Error(`سریال «${s}» متعلق به کالای دیگری است`);
-        if (row.warehouse_id !== warehouse_id) throw new Error(`سریال «${s}» در انبار انتخاب شده موجود نیست`);
-        if (row.status !== "available") throw new Error(`سریال «${s}» در دسترس نیست (وضعیت: ${row.status})`);
+        if (row.warehouse_id !== warehouse_id)
+          throw new Error(`سریال «${s}» در انبار انتخاب شده موجود نیست`);
+        if (row.status !== "available")
+          throw new Error(`سریال «${s}» در دسترس نیست (وضعیت: ${row.status})`);
       }
     }
 
@@ -82,7 +93,8 @@ export async function saveDocument(data: any, userId: string) {
       const dups = await tx.serialNumber.findMany({
         where: { serial_number: { in: serials } },
       });
-      if (dups.length > 0) throw new Error(`سریال تکراری: ${dups.map(d => d.serial_number).join("، ")}`);
+      if (dups.length > 0)
+        throw new Error(`سریال تکراری: ${dups.map((d: any) => d.serial_number).join("، ")}`);
     }
 
     const doc = await tx.inventoryDocument.create({
@@ -138,8 +150,13 @@ export async function saveDocument(data: any, userId: string) {
   });
 }
 
-export async function deleteDocument(docId: string, documentType: "incoming" | "outgoing", docNumber: number, userId: string) {
-  return await prisma.$transaction(async (tx) => {
+export async function deleteDocument(
+  docId: string,
+  documentType: "incoming" | "outgoing",
+  docNumber: number,
+  userId: string,
+) {
+  return await prisma.$transaction(async (tx: any) => {
     if (documentType === "outgoing") {
       await tx.serialNumber.updateMany({
         where: { outgoing_document_id: docId },

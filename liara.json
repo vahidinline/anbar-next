@@ -1,5 +1,10 @@
 {
-  "platform": "node",
-  "build": "npm run build",
-  "start": "node dist/server/index.js"
+  "app": "my-anbar-project",
+  "port": 3000,
+  "disks": [
+    {
+      "name": "storage",
+      "mountTo": "/app/data"
+    }
+  ]
 }

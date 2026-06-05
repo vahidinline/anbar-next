@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import JsBarcode from 'jsbarcode';
+import { useEffect, useRef } from "react";
+import JsBarcode from "jsbarcode";
 
 export function Barcode({
   value,
@@ -21,9 +21,14 @@ export function Barcode({
     if (!ref.current || !value) return;
     try {
       JsBarcode(ref.current, String(value), {
-        format: 'CODE128',
-        height, width, fontSize, displayValue,
-        margin: 0, background: '#ffffff', lineColor: '#000000',
+        format: "CODE128",
+        height,
+        width,
+        fontSize,
+        displayValue,
+        margin: 0,
+        background: "#ffffff",
+        lineColor: "#000000",
       });
     } catch {
       // ignore

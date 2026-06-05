@@ -1,11 +1,11 @@
-import { Search } from 'lucide-react';
-import { Input } from '@/components/ui-kit';
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui-kit";
 
 /** نوار جستجوی استاندارد فارسی با آیکون. */
 export function SearchBar({
   value,
   onChange,
-  placeholder = 'جستجو...',
+  placeholder = "جستجو...",
   className,
 }: {
   value: string;
@@ -14,7 +14,7 @@ export function SearchBar({
   className?: string;
 }) {
   return (
-    <div className={`relative ${className ?? ''}`}>
+    <div className={`relative ${className ?? ""}`}>
       <Search className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
       <Input
         value={value}

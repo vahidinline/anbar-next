@@ -8,7 +8,7 @@ export async function fetchWarehousesData() {
 
 export async function saveWarehouse(data: any, userId: string) {
   const { id, name, description } = data;
-  
+
   if (id) {
     await prisma.warehouse.update({
       where: { id },

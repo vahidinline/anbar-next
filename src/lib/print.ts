@@ -1,10 +1,13 @@
 export function escapeHtml(s: unknown): string {
-  return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+  return String(s ?? "").replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+  );
 }
 
 // Absolute URL for the company logo (works inside about:blank print windows)
 export const BRAND_LOGO_URL =
-  typeof window !== 'undefined' ? `${window.location.origin}/logo.png` : '/logo.png';
+  typeof window !== "undefined" ? `${window.location.origin}/logo.png` : "/logo.png";
 
 // Reusable branded print header
 export function brandHeader(docTitle: string): string {
@@ -23,11 +26,12 @@ export function brandHeader(docTitle: string): string {
 }
 
 // Open a new window with provided HTML and trigger print
-export function printHtml(html: string, title = 'چاپ') {
-  const w = window.open('', '_blank', 'width=900,height=700');
+export function printHtml(html: string, title = "چاپ") {
+  const w = window.open("", "_blank", "width=900,height=700");
   if (!w) return;
   w.document.open();
-  w.document.write(`<!doctype html><html dir="rtl" lang="fa"><head><meta charset="utf-8"><title>${title}</title>
+  w.document
+    .write(`<!doctype html><html dir="rtl" lang="fa"><head><meta charset="utf-8"><title>${title}</title>
   <style>
     @page { size: A4; margin: 12mm; }
     * { box-sizing: border-box; }
@@ -61,11 +65,15 @@ export function printHtml(html: string, title = 'چاپ') {
   </body></html>`);
   w.document.close();
   w.focus();
-  setTimeout(() => { try { w.print(); } catch {} }, 500);
+  setTimeout(() => {
+    try {
+      w.print();
+    } catch {}
+  }, 500);
 }
 
 // Convert SVG node to data url string for embedding
 export function svgToDataUrl(svg: SVGSVGElement): string {
   const xml = new XMLSerializer().serializeToString(svg);
-  return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml)));
+  return "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(xml)));
 }

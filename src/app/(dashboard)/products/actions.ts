@@ -14,7 +14,7 @@ export async function fetchProductsData() {
 export async function saveProduct(data: any, userId: string) {
   const { id, serials, ...payload } = data;
 
-  return await prisma.$transaction(async (tx) => {
+  return await prisma.$transaction(async (tx: any) => {
     if (id) {
       // Update
       const { code, is_serial_tracked, tracking_notes, ...updatePayload } = payload;
@@ -33,7 +33,9 @@ export async function saveProduct(data: any, userId: string) {
         });
 
         if (dups.length > 0) {
-          throw new Error(`سریال‌های زیر قبلاً ثبت شده‌اند: ${dups.map(d => d.serial_number).join("، ")}`);
+          throw new Error(
+            `سریال‌های زیر قبلاً ثبت شده‌اند: ${dups.map((d: any) => d.serial_number).join("، ")}`,
+          );
         }
       }
 

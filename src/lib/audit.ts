@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export async function logAudit(params: {
   action: string;
@@ -9,7 +9,7 @@ export async function logAudit(params: {
   try {
     const { data: u } = await supabase.auth.getUser();
     if (!u.user) return;
-    await supabase.from('audit_logs').insert({
+    await supabase.from("audit_logs").insert({
       user_id: u.user.id,
       user_email: u.user.email ?? null,
       action: params.action,

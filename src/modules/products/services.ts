@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export type Product = {
   id: string;
@@ -19,28 +19,28 @@ export type Product = {
 export const productsService = {
   async list() {
     const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("products")
+      .select("*")
+      .order("created_at", { ascending: false });
     if (error) throw error;
     return (data ?? []) as Product[];
   },
   async getById(id: string) {
-    const { data, error } = await supabase.from('products').select('*').eq('id', id).maybeSingle();
+    const { data, error } = await supabase.from("products").select("*").eq("id", id).maybeSingle();
     if (error) throw error;
     return data as Product | null;
   },
   async create(payload: Partial<Product> & { user_id: string; code: string; name: string }) {
-    const { data, error } = await supabase.from('products').insert(payload).select().single();
+    const { data, error } = await supabase.from("products").insert(payload).select().single();
     if (error) throw error;
     return data as Product;
   },
   async update(id: string, patch: Partial<Product>) {
-    const { error } = await supabase.from('products').update(patch).eq('id', id);
+    const { error } = await supabase.from("products").update(patch).eq("id", id);
     if (error) throw error;
   },
   async remove(id: string) {
-    const { error } = await supabase.from('products').delete().eq('id', id);
+    const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) throw error;
   },
 };

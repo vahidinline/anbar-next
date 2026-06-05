@@ -8,7 +8,7 @@ export async function fetchProductGroupsData() {
 
 export async function saveProductGroup(data: any, userId: string) {
   const { id, title, description } = data;
-  
+
   if (id) {
     await prisma.productGroup.update({
       where: { id },

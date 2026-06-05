@@ -67,7 +67,13 @@ export default function LoginPage() {
       <Card className="w-full max-w-md p-7">
         <div className="flex flex-col items-center mb-6">
           <div className="size-20 rounded-2xl bg-white border flex items-center justify-center shadow-soft p-2">
-            <Image src="/logo.png" width={64} height={64} alt="فید ایران صنعت" className="w-16 h-auto object-contain" />
+            <Image
+              src="/logo.png"
+              width={64}
+              height={64}
+              alt="فید ایران صنعت"
+              className="w-16 h-auto object-contain"
+            />
           </div>
           <h1 className="mt-3 text-lg font-bold text-center">سیستم مدیریت انبار</h1>
           <p className="text-xs text-muted-foreground mt-1">فید ایران صنعت</p>
@@ -78,9 +84,7 @@ export default function LoginPage() {
           <button
             onClick={() => setMode("signin")}
             className={`flex-1 py-2 rounded-md transition-colors ${
-              mode === "signin"
-                ? "bg-card shadow-soft font-medium"
-                : "text-muted-foreground"
+              mode === "signin" ? "bg-card shadow-soft font-medium" : "text-muted-foreground"
             }`}
           >
             ورود
@@ -88,9 +92,7 @@ export default function LoginPage() {
           <button
             onClick={() => setMode("signup")}
             className={`flex-1 py-2 rounded-md transition-colors ${
-              mode === "signup"
-                ? "bg-card shadow-soft font-medium"
-                : "text-muted-foreground"
+              mode === "signup" ? "bg-card shadow-soft font-medium" : "text-muted-foreground"
             }`}
           >
             ثبت نام
@@ -117,11 +119,7 @@ export default function LoginPage() {
             />
           </Field>
           <Button type="submit" disabled={busy} className="w-full">
-            {busy
-              ? "در حال پردازش..."
-              : mode === "signin"
-              ? "ورود به سیستم"
-              : "ساخت حساب کاربری"}
+            {busy ? "در حال پردازش..." : mode === "signin" ? "ورود به سیستم" : "ساخت حساب کاربری"}
           </Button>
           {mode === "signin" && (
             <button

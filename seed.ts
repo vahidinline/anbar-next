@@ -1,17 +1,17 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
-import { PrismaLibSql } from '@prisma/adapter-libsql'
+import { PrismaLibSql } from "@prisma/adapter-libsql";
 
 const adapter = new PrismaLibSql({
   url: "file:./dev.db",
-})
+});
 
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const email = 'admin@test.com';
-  const password = 'password123';
+  const email = "admin@test.com";
+  const password = "password123";
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await prisma.profile.upsert({
@@ -22,21 +22,21 @@ async function main() {
     create: {
       email,
       password: hashedPassword,
-      full_name: 'Admin User',
+      full_name: "Admin User",
       is_active: true,
     },
   });
 
   // Ensure they have the admin role
   await prisma.userRole.deleteMany({
-    where: { user_id: user.id }
+    where: { user_id: user.id },
   });
-  
+
   await prisma.userRole.create({
     data: {
       user_id: user.id,
-      role: 'admin',
-    }
+      role: "admin",
+    },
   });
 
   console.log(`Admin user seeded: ${email} / ${password}`);

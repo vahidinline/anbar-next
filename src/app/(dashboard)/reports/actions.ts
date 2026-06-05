@@ -10,6 +10,6 @@ export async function fetchReportsData() {
     prisma.contact.findMany({ select: { id: true, name: true } }),
     prisma.warehouse.findMany({ select: { id: true, name: true } }),
   ]);
-  
+
   return { products, docs, groups, contacts, warehouses };
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /** مقدار را پس از تأخیر مشخص برمی‌گرداند — برای جستجوی زنده. */
 export function useDebounce<T>(value: T, delay = 300): T {

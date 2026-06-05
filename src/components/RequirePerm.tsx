@@ -1,8 +1,8 @@
-import { ReactNode } from 'react';
-import { useAuth } from '@/lib/auth';
-import type { Permission } from '@/lib/permissions';
-import { DENIED_MESSAGE } from '@/lib/permissions';
-import { ShieldAlert } from 'lucide-react';
+import { ReactNode } from "react";
+import { useAuth } from "@/lib/auth";
+import type { Permission } from "@/lib/permissions";
+import { DENIED_MESSAGE } from "@/lib/permissions";
+import { ShieldAlert } from "lucide-react";
 
 export function RequirePerm({ perm, children }: { perm: Permission; children: ReactNode }) {
   const { has, loading } = useAuth();

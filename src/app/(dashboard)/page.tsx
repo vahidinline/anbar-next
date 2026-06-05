@@ -1,5 +1,13 @@
 import Link from "next/link";
-import { Package, FileText, Users, Boxes, ArrowDownToLine, ArrowUpFromLine, AlertTriangle } from "lucide-react";
+import {
+  Package,
+  FileText,
+  Users,
+  Boxes,
+  ArrowDownToLine,
+  ArrowUpFromLine,
+  AlertTriangle,
+} from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Card, DataTable, EmptyState, Badge } from "@/components/ui-kit";
 import { formatJalali, formatNumber, toFaDigits } from "@/lib/persian";
@@ -43,8 +51,8 @@ export default async function DashboardPage() {
   const totalStock = Object.values(stockByProduct).reduce((a, b) => a + b, 0);
 
   const lowStock = products
-    .map((p) => ({ ...p, qty: stockByProduct[p.id] || 0 }))
-    .filter((p) => p.qty <= 5)
+    .map((p: any) => ({ ...p, qty: stockByProduct[p.id] || 0 }))
+    .filter((p: any) => p.qty <= 5)
     .slice(0, 5);
 
   const stats = {
@@ -55,10 +63,30 @@ export default async function DashboardPage() {
   };
 
   const cards = [
-    { label: "تعداد کالاها", value: stats.products, icon: Package, color: "bg-primary/10 text-primary" },
-    { label: "تعداد اسناد", value: stats.documents, icon: FileText, color: "bg-accent text-accent-foreground" },
-    { label: "موجودی کل", value: stats.totalStock, icon: Boxes, color: "bg-success/15 text-success" },
-    { label: "تعداد طرف حساب‌ها", value: stats.contacts, icon: Users, color: "bg-warning/20 text-warning-foreground" },
+    {
+      label: "تعداد کالاها",
+      value: stats.products,
+      icon: Package,
+      color: "bg-primary/10 text-primary",
+    },
+    {
+      label: "تعداد اسناد",
+      value: stats.documents,
+      icon: FileText,
+      color: "bg-accent text-accent-foreground",
+    },
+    {
+      label: "موجودی کل",
+      value: stats.totalStock,
+      icon: Boxes,
+      color: "bg-success/15 text-success",
+    },
+    {
+      label: "تعداد طرف حساب‌ها",
+      value: stats.contacts,
+      icon: Users,
+      color: "bg-warning/20 text-warning-foreground",
+    },
   ];
 
   return (
@@ -96,7 +124,7 @@ export default async function DashboardPage() {
             <EmptyState message="هنوز سندی ثبت نشده" />
           ) : (
             <DataTable columns={["شماره", "نوع", "کالا", "طرف حساب", "مقدار", "تاریخ"]}>
-              {documents.map((d) => (
+              {documents.map((d: any) => (
                 <tr key={d.id}>
                   <td className="px-4 py-2.5 font-mono">{toFaDigits(d.doc_number)}</td>
                   <td className="px-4 py-2.5">
@@ -133,8 +161,11 @@ export default async function DashboardPage() {
             <p className="text-xs text-muted-foreground">موجودی همه کالاها مناسب است.</p>
           ) : (
             <ul className="space-y-2">
-              {lowStock.map((p) => (
-                <li key={p.id} className="flex justify-between items-center p-2.5 rounded-lg bg-muted/50">
+              {lowStock.map((p: any) => (
+                <li
+                  key={p.id}
+                  className="flex justify-between items-center p-2.5 rounded-lg bg-muted/50"
+                >
                   <span className="text-sm font-medium truncate">{p.name}</span>
                   <Badge tone={p.qty <= 0 ? "destructive" : "warning"}>
                     {formatNumber(p.qty)} {p.unit ?? ""}
